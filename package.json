@@ -1,0 +1,15 @@
+{
+  "name": "slide-show",
+  "version": "0.0.1",
+  "description": "\"simple and decoupled slide show with basic animation and touch controls\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Pedro La Rosa D.",
+  "license": "MIT",
+  "devDependencies": {
+    "@testing-library/dom": "^8.0.0",
+    "jest": "^27.0.5"
+  }
+}
