@@ -106,10 +106,10 @@
 	transition: transform 0.3s ease-in-out;
 }
 
-.grabbing {
+.slider__container--grabbing {
 	cursor: grabbing;
 }
 
-.grabbing .slider__slide__image {
+.slider__container--grabbing .slider__slide__image {
 	transform: scale(0.9);
 }

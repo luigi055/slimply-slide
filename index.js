@@ -203,7 +203,7 @@ function setSlider({
 
 			// https://css-tricks.com/using-requestanimationframe/
 			animationID = requestAnimationFrame(animation);
-			sliderContainer.classList.add("grabbing");
+			sliderContainer.classList.add("slider__container--grabbing");
 		};
 	}
 
@@ -217,7 +217,7 @@ function setSlider({
 
 		setPositionByIndex(currentIndex);
 
-		sliderContainer.classList.remove("grabbing");
+		sliderContainer.classList.remove("slider__container--grabbing");
 	}
 
 	function touchMove(event) {
