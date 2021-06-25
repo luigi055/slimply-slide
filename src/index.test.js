@@ -36,7 +36,7 @@ function slideshowDOM() {
   	<div class="slider" id="slider1" data-testid="${testSliderTestId}">
 			<div class="slider__container">
 				<div class="slider__slide" data-testid="slide-1">
-					<span >1</span>
+					<span class="slider__slide__image" >1</span>
 				</div>
 				<div class="slider__slide" data-testid="slide-2">
 					<span>2</span>
@@ -56,27 +56,8 @@ describe("Testing the simplySlide widget", () => {
 	beforeEach(() => {
 		container = slideshowDOM();
 	});
+
 	describe("Initializing the slider correctly", () => {
-		it("should initialize the slider when simplySlide receives a node", () => {
-			const sliderNode = getByTestId(container, testSliderTestId);
-
-			setSlider({ node: sliderNode });
-
-			expect(sliderNode).toHaveAttribute("role", "toolbar");
-		});
-
-		it("should initialize the slider without dots control", () => {
-			const sliderNode = getByTestId(container, testSliderTestId);
-
-			setSlider({ node: sliderNode, hasDotsControl: false });
-			const sliderDotsControl = queryByTestId(
-				container,
-				sliderDotsControlTestId
-			);
-
-			expect(sliderDotsControl).toBeNull();
-		});
-
 		it("should initialize the slider without directions control", () => {
 			const sliderNode = getByTestId(container, testSliderTestId);
 
@@ -97,6 +78,80 @@ describe("Testing the simplySlide widget", () => {
 			expect(container.querySelector("#slider1")).not.toHaveAttribute(
 				"role",
 				"toolbar"
+			);
+		});
+
+		it("should initialize the slider when simplySlide receives a node", () => {
+			const sliderNode = getByTestId(container, testSliderTestId);
+
+			setSlider({ node: sliderNode });
+
+			expect(sliderNode).toHaveAttribute("role", "toolbar");
+		});
+
+		it("should initialize the slider without dots control", () => {
+			const sliderNode = getByTestId(container, testSliderTestId);
+
+			setSlider({ node: sliderNode, hasDotsControl: false });
+			const sliderDotsControl = queryByTestId(
+				container,
+				sliderDotsControlTestId
+			);
+
+			expect(sliderDotsControl).toBeNull();
+		});
+
+		it("should map correctly the slide aria-described with the dots id", () => {
+			const slider = container.querySelector("#slider1");
+			setSlider({ node: slider });
+
+			const sliderDotsControl = getByTestId(container, sliderDotsControlTestId);
+
+			const slideDotOne = sliderDotsControl.children[0];
+			const slideDotTwo = sliderDotsControl.children[1];
+			const slideDotThree = sliderDotsControl.children[2];
+			const slideOne = getByTestId(container, slideOneTestId);
+			const slideTwo = getByTestId(container, slideTwoTestId);
+			const slideThree = getByTestId(container, slideThreeTestId);
+
+			expect(slideOne).toHaveAttribute(
+				"aria-describedby",
+				slideDotOne.getAttribute("id")
+			);
+			expect(slideTwo).toHaveAttribute(
+				"aria-describedby",
+				slideDotTwo.getAttribute("id")
+			);
+			expect(slideThree).toHaveAttribute(
+				"aria-describedby",
+				slideDotThree.getAttribute("id")
+			);
+		});
+
+		it("should map correctly the dots aria-controls with the slide id", () => {
+			const slider = container.querySelector("#slider1");
+			setSlider({ node: slider });
+
+			const sliderDotsControl = getByTestId(container, sliderDotsControlTestId);
+
+			const slideDotOne = sliderDotsControl.children[0];
+			const slideDotTwo = sliderDotsControl.children[1];
+			const slideDotThree = sliderDotsControl.children[2];
+			const slideOne = getByTestId(container, slideOneTestId);
+			const slideTwo = getByTestId(container, slideTwoTestId);
+			const slideThree = getByTestId(container, slideThreeTestId);
+
+			expect(slideDotOne).toHaveAttribute(
+				"aria-controls",
+				slideOne.getAttribute("id")
+			);
+			expect(slideDotTwo).toHaveAttribute(
+				"aria-controls",
+				slideTwo.getAttribute("id")
+			);
+			expect(slideDotThree).toHaveAttribute(
+				"aria-controls",
+				slideThree.getAttribute("id")
 			);
 		});
 	});
@@ -122,98 +177,109 @@ describe("Testing the simplySlide widget", () => {
 			);
 		});
 
-		it("should use the colors by default", () => {
-			const slider = container.querySelector("#slider1");
-			setSlider({ node: slider });
-			const sliderDotsControl = getByTestId(container, sliderDotsControlTestId);
-			const nextSlideButton = getByTestId(container, nextSlideButtonTestId);
-			const previousSlideButton = getByTestId(
-				container,
-				previousSlideButtonTestId
-			);
+		describe("Testing controls customizable colors", () => {
+			it("should use the colors by default", () => {
+				const slider = container.querySelector("#slider1");
+				setSlider({ node: slider });
+				const sliderDotsControl = getByTestId(
+					container,
+					sliderDotsControlTestId
+				);
+				const nextSlideButton = getByTestId(container, nextSlideButtonTestId);
 
-			const nextSlideButtonIcon = nextSlideButton.querySelector("span");
-			const previousSlideButtonIcon = previousSlideButton.querySelector("span");
+				const previousSlideButton = getByTestId(
+					container,
+					previousSlideButtonTestId
+				);
 
-			expect(nextSlideButtonIcon).toHaveStyle(
-				`border-top-color: ${DEFAULT_DIRECTION_ICONS_COLOR}`
-			);
-			expect(nextSlideButtonIcon).toHaveStyle(
-				`border-right-color: ${DEFAULT_DIRECTION_ICONS_COLOR}`
-			);
-			expect(previousSlideButtonIcon).toHaveStyle(
-				`border-top-color: ${DEFAULT_DIRECTION_ICONS_COLOR}`
-			);
-			expect(previousSlideButtonIcon).toHaveStyle(
-				`border-left-color: ${DEFAULT_DIRECTION_ICONS_COLOR}`
-			);
-			expect(previousSlideButton).toHaveStyle(
-				`background: ${DEFAULT_CONTROLS_COLOR}`
-			);
-			expect(nextSlideButton).toHaveStyle(
-				`background: ${DEFAULT_CONTROLS_COLOR}`
-			);
-			expect(previousSlideButton).toHaveStyle(
-				`background: ${DEFAULT_CONTROLS_COLOR}`
-			);
-			expect(sliderDotsControl.children[0].querySelector("button")).toHaveStyle(
-				`background: ${DEFAULT_CONTROLS_ACTIVE_COLOR}`
-			);
-			expect(sliderDotsControl.children[1].querySelector("button")).toHaveStyle(
-				`background: ${DEFAULT_CONTROLS_COLOR}`
-			);
-			expect(sliderDotsControl.children[2].querySelector("button")).toHaveStyle(
-				`background: ${DEFAULT_CONTROLS_COLOR}`
-			);
-		});
+				const nextSlideButtonIcon = nextSlideButton.querySelector("span");
+				const previousSlideButtonIcon =
+					previousSlideButton.querySelector("span");
 
-		it("should set custom the colors for controls", () => {
-			const slider = container.querySelector("#slider1");
-			const controlsColor = "#f905";
-			const controlsActiveColor = "#f90";
-			const directionIconColor = "#333";
-
-			setSlider({
-				node: slider,
-				controlsColor,
-				controlsActiveColor,
-				directionIconColor,
+				expect(nextSlideButtonIcon).toHaveStyle(
+					`border-top-color: ${DEFAULT_DIRECTION_ICONS_COLOR}`
+				);
+				expect(nextSlideButtonIcon).toHaveStyle(
+					`border-right-color: ${DEFAULT_DIRECTION_ICONS_COLOR}`
+				);
+				expect(previousSlideButtonIcon).toHaveStyle(
+					`border-top-color: ${DEFAULT_DIRECTION_ICONS_COLOR}`
+				);
+				expect(previousSlideButtonIcon).toHaveStyle(
+					`border-left-color: ${DEFAULT_DIRECTION_ICONS_COLOR}`
+				);
+				expect(previousSlideButton).toHaveStyle(
+					`background: ${DEFAULT_CONTROLS_COLOR}`
+				);
+				expect(nextSlideButton).toHaveStyle(
+					`background: ${DEFAULT_CONTROLS_COLOR}`
+				);
+				expect(previousSlideButton).toHaveStyle(
+					`background: ${DEFAULT_CONTROLS_COLOR}`
+				);
+				expect(
+					sliderDotsControl.children[0].querySelector("button")
+				).toHaveStyle(`background: ${DEFAULT_CONTROLS_ACTIVE_COLOR}`);
+				expect(
+					sliderDotsControl.children[1].querySelector("button")
+				).toHaveStyle(`background: ${DEFAULT_CONTROLS_COLOR}`);
+				expect(
+					sliderDotsControl.children[2].querySelector("button")
+				).toHaveStyle(`background: ${DEFAULT_CONTROLS_COLOR}`);
 			});
-			const sliderDotsControl = getByTestId(container, sliderDotsControlTestId);
-			const nextSlideButton = getByTestId(container, nextSlideButtonTestId);
-			const previousSlideButton = getByTestId(
-				container,
-				previousSlideButtonTestId
-			);
 
-			const nextSlideButtonIcon = nextSlideButton.querySelector("span");
-			const previousSlideButtonIcon = previousSlideButton.querySelector("span");
+			it("should set custom the colors for controls", () => {
+				const slider = container.querySelector("#slider1");
+				const controlsColor = "#f905";
+				const controlsActiveColor = "#f90";
+				const directionIconColor = "#333";
 
-			expect(nextSlideButtonIcon).toHaveStyle(
-				`border-top-color: ${directionIconColor}`
-			);
-			expect(nextSlideButtonIcon).toHaveStyle(
-				`border-right-color: ${directionIconColor}`
-			);
-			expect(previousSlideButtonIcon).toHaveStyle(
-				`border-top-color: ${directionIconColor}`
-			);
-			expect(previousSlideButtonIcon).toHaveStyle(
-				`border-left-color: ${directionIconColor}`
-			);
-			expect(previousSlideButton).toHaveStyle(`background: ${controlsColor}`);
-			expect(nextSlideButton).toHaveStyle(`background: ${controlsColor}`);
-			expect(previousSlideButton).toHaveStyle(`background: ${controlsColor}`);
-			expect(sliderDotsControl.children[0].querySelector("button")).toHaveStyle(
-				`background: ${controlsActiveColor}`
-			);
-			expect(sliderDotsControl.children[1].querySelector("button")).toHaveStyle(
-				`background: ${controlsColor}`
-			);
-			expect(sliderDotsControl.children[2].querySelector("button")).toHaveStyle(
-				`background: ${controlsColor}`
-			);
-		});
+				setSlider({
+					node: slider,
+					controlsColor,
+					controlsActiveColor,
+					directionIconColor,
+				});
+				const sliderDotsControl = getByTestId(
+					container,
+					sliderDotsControlTestId
+				);
+				const nextSlideButton = getByTestId(container, nextSlideButtonTestId);
+				const previousSlideButton = getByTestId(
+					container,
+					previousSlideButtonTestId
+				);
+
+				const nextSlideButtonIcon = nextSlideButton.querySelector("span");
+				const previousSlideButtonIcon =
+					previousSlideButton.querySelector("span");
+
+				expect(nextSlideButtonIcon).toHaveStyle(
+					`border-top-color: ${directionIconColor}`
+				);
+				expect(nextSlideButtonIcon).toHaveStyle(
+					`border-right-color: ${directionIconColor}`
+				);
+				expect(previousSlideButtonIcon).toHaveStyle(
+					`border-top-color: ${directionIconColor}`
+				);
+				expect(previousSlideButtonIcon).toHaveStyle(
+					`border-left-color: ${directionIconColor}`
+				);
+				expect(previousSlideButton).toHaveStyle(`background: ${controlsColor}`);
+				expect(nextSlideButton).toHaveStyle(`background: ${controlsColor}`);
+				expect(previousSlideButton).toHaveStyle(`background: ${controlsColor}`);
+				expect(
+					sliderDotsControl.children[0].querySelector("button")
+				).toHaveStyle(`background: ${controlsActiveColor}`);
+				expect(
+					sliderDotsControl.children[1].querySelector("button")
+				).toHaveStyle(`background: ${controlsColor}`);
+				expect(
+					sliderDotsControl.children[2].querySelector("button")
+				).toHaveStyle(`background: ${controlsColor}`);
+			});
+		}); // Testing controls customizable colors END
 
 		describe("Testing previous and next buttons", () => {
 			it("should activate the second dot when the user clicks on the next button", async () => {
@@ -452,5 +518,77 @@ describe("Testing the simplySlide widget", () => {
 			expect(slideThree).toHaveAttribute("aria-selected", "false");
 			expect(slideThree).toHaveAttribute("aria-hidden", "true");
 		});
+
+		describe("Testing slides jumping through slides", () => {
+			it("should jump to the second slide", async () => {
+				const slider = container.querySelector("#slider1");
+				setSlider({ node: slider });
+
+				const sliderDotsControl = getByTestId(
+					container,
+					sliderDotsControlTestId
+				);
+
+				sliderDotsControl.children[1].querySelector("button").click();
+
+				const slideOne = getByTestId(container, slideOneTestId);
+				const slideTwo = getByTestId(container, slideTwoTestId);
+				const slideThree = getByTestId(container, slideThreeTestId);
+
+				expect(slideOne).toHaveAttribute("aria-selected", "false");
+				expect(slideOne).toHaveAttribute("aria-hidden", "true");
+				expect(slideTwo).toHaveAttribute("aria-selected", "true");
+				expect(slideTwo).toHaveAttribute("aria-hidden", "false");
+				expect(slideThree).toHaveAttribute("aria-selected", "false");
+				expect(slideThree).toHaveAttribute("aria-hidden", "true");
+			});
+
+			it("should jump to the third slide", async () => {
+				const slider = container.querySelector("#slider1");
+				setSlider({ node: slider });
+
+				const sliderDotsControl = getByTestId(
+					container,
+					sliderDotsControlTestId
+				);
+
+				sliderDotsControl.children[2].querySelector("button").click();
+
+				const slideOne = getByTestId(container, slideOneTestId);
+				const slideTwo = getByTestId(container, slideTwoTestId);
+				const slideThree = getByTestId(container, slideThreeTestId);
+
+				expect(slideOne).toHaveAttribute("aria-selected", "false");
+				expect(slideOne).toHaveAttribute("aria-hidden", "true");
+				expect(slideTwo).toHaveAttribute("aria-selected", "false");
+				expect(slideTwo).toHaveAttribute("aria-hidden", "true");
+				expect(slideThree).toHaveAttribute("aria-selected", "true");
+				expect(slideThree).toHaveAttribute("aria-hidden", "false");
+			});
+
+			it("should jump to the third slide and go back to the second", async () => {
+				const slider = container.querySelector("#slider1");
+				setSlider({ node: slider });
+
+				const sliderDotsControl = getByTestId(
+					container,
+					sliderDotsControlTestId
+				);
+
+				sliderDotsControl.children[2].querySelector("button").click();
+				sliderDotsControl.children[1].querySelector("button").click();
+
+				const slideOne = getByTestId(container, slideOneTestId);
+				const slideTwo = getByTestId(container, slideTwoTestId);
+				const slideThree = getByTestId(container, slideThreeTestId);
+
+				expect(slideOne).toHaveAttribute("aria-selected", "false");
+				expect(slideOne).toHaveAttribute("aria-hidden", "true");
+				expect(slideTwo).toHaveAttribute("aria-selected", "true");
+				expect(slideTwo).toHaveAttribute("aria-hidden", "false");
+				expect(slideThree).toHaveAttribute("aria-selected", "false");
+				expect(slideThree).toHaveAttribute("aria-hidden", "true");
+			});
+		}); // Testing slides jumping through slides END
 	}); // Testing Slides END
 });

@@ -116,6 +116,7 @@ export default class SlidesEngine {
 
 			slide.setAttribute("aria-hidden", true);
 			slide.setAttribute("aria-selected", false);
+			slide.setAttribute("id", `slide-${index}`);
 			slide.setAttribute("role", "option");
 			slide.setAttribute(
 				"aria-describedby",
