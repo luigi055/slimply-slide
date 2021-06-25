@@ -151,7 +151,7 @@ class ActiveSlideManager {
 	}
 }
 
-class Slides {
+class SlidesEngine {
 	constructor(slider, activeSlideManager) {
 		this._slider = slider;
 		this._activeSlideManager = activeSlideManager;
@@ -289,7 +289,7 @@ class InitializeSlider {
 			this._slider,
 			this._options
 		);
-		this._slides = new Slides(this._slider, this._activeSlideManager);
+		this._slides = new SlidesEngine(this._slider, this._activeSlideManager);
 	}
 
 	init() {
