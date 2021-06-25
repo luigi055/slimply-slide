@@ -75,7 +75,7 @@ export default class SlidesEngine {
 			this.currentIndex -= 1;
 		}
 
-		this._setPositionByIndex(this.currentIndex);
+		this.setPositionByIndex(this.currentIndex);
 		this._sliderContainer.classList.remove(
 			SLIDER_CONTAINER_GRABBING_STATUS_CLASS
 		);
@@ -89,7 +89,7 @@ export default class SlidesEngine {
 		}
 	}
 
-	_setPositionByIndex = (index) => {
+	setPositionByIndex = (index) => {
 		this.currentTranslate = index * -window.innerWidth;
 		this.prevTranslate = this.currentTranslate;
 		this.currentIndex = index;
@@ -99,12 +99,12 @@ export default class SlidesEngine {
 
 	goNextSlide() {
 		const nextIndex = Math.min(this.currentIndex + 1, this._slides.length - 1);
-		this._setPositionByIndex(nextIndex);
+		this.setPositionByIndex(nextIndex);
 	}
 
 	goPreviousSlide() {
 		const previousIndex = Math.max(this.currentIndex - 1, 0);
-		this._setPositionByIndex(previousIndex);
+		this.setPositionByIndex(previousIndex);
 	}
 
 	generateSlides() {
@@ -114,7 +114,8 @@ export default class SlidesEngine {
 				slideImage.addEventListener("dragstart", (e) => e.preventDefault());
 			}
 
-			slide.setAttribute("aria-hidden", false);
+			slide.setAttribute("aria-hidden", true);
+			slide.setAttribute("aria-selected", false);
 			slide.setAttribute("role", "option");
 			slide.setAttribute(
 				"aria-describedby",

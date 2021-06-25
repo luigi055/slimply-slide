@@ -8,8 +8,8 @@
 		"dist"
 	],
 	"scripts": {
-		"test": "jest",
 		"test:ci": "npx cross-env CI=true jest test --coverage",
+		"test:watch": "jest --watch",
 		"build": "rollup -c rollup.config.js"
 	},
 	"author": "Pedro La Rosa D.",

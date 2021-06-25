@@ -69,6 +69,43 @@
 				</div>
 			</div>
 		</div>
+		<div class="slider" id="slider3">
+			<div class="slider__container">
+				<div class="slider__slide">
+					<span>
+						<h2>Airpods</h2>
+						<h4>$199</h4>
+						<img
+							class="slider__slide__image"
+							src="https://i.ibb.co/y08W0Jx/image1.png"
+							alt=""
+						/>
+						<a href="#" class="btn">Buy Now</a>
+					</span>
+				</div>
+
+				<div class="slider__slide">
+					<h2>iPhone 12</h2>
+					<h4>$799</h4>
+					<img
+						class="slider__slide__image"
+						src="https://i.ibb.co/NYdGg2q/image2.png"
+						alt=""
+					/>
+					<a href="#" class="btn">Buy Now</a>
+				</div>
+				<div class="slider__slide">
+					<h2>iPad</h2>
+					<h4>$599</h4>
+					<img
+						class="slider__slide__image"
+						src="https://i.ibb.co/Jd3t4hQ/image3.png"
+						alt=""
+					/>
+					<a href="#" class="btn">Buy Now</a>
+				</div>
+			</div>
+		</div>
 		<script src="../dist/simply-slide.js"></script>
 		<script>
 			document.addEventListener("DOMContentLoaded", function (event) {
@@ -77,6 +114,9 @@
 					controlsColor: "#f905",
 					controlsActiveColor: "#f90",
 					directionIconColor: "#333",
+				});
+				simplySlide.setSlider({
+					node: document.getElementById("slider3"),
 				});
 				simplySlide.setSlider({
 					node: document.getElementById("slider2"),

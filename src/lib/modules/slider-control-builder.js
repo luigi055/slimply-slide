@@ -25,7 +25,7 @@ export default class SliderControlsBuilder {
 		button.setAttribute("aria-label", `slide ${index + 1}`);
 		button.addEventListener("click", handleDotClick);
 		const li = document.createElement("li");
-		li.setAttribute("aria-hidden", "true");
+		li.setAttribute("aria-selected", "false");
 		li.setAttribute("role", "presentation");
 		li.setAttribute("aria-controls", `slide-${index}`);
 		li.setAttribute(
@@ -54,6 +54,7 @@ export default class SliderControlsBuilder {
 		);
 		this.sliderButtonLeft.style.background = this.options.controlsColor;
 		this.sliderButtonLeft.setAttribute("type", "button");
+		this.sliderButtonLeft.setAttribute("data-testid", "previous-slide-button");
 		this.sliderButtonLeft.setAttribute("aria-label", "Previous slide");
 		this.sliderButtonLeft.appendChild(this._generateDirectionIcon());
 		this.sliderButtonLeft.addEventListener("click", onClick);
@@ -69,6 +70,7 @@ export default class SliderControlsBuilder {
 		);
 		this.sliderButtonRight.style.background = this.options.controlsColor;
 		this.sliderButtonRight.setAttribute("type", "button");
+		this.sliderButtonRight.setAttribute("data-testid", "next-slide-button");
 		this.sliderButtonRight.setAttribute("aria-label", "Next slide");
 		this.sliderButtonRight.appendChild(this._generateDirectionIcon());
 		this.sliderButtonRight.addEventListener("click", onClick);
@@ -78,6 +80,7 @@ export default class SliderControlsBuilder {
 
 	createDotsControl(slides, { onDotClick }) {
 		this.sliderDotsControl = document.createElement("ul");
+		this.sliderDotsControl.setAttribute("data-testid", "slider-dots-control");
 		this.sliderDotsControl.classList.add(SLIDER_DOTS_CONTROL_CLASS);
 
 		slides.forEach((slide, index) => {
