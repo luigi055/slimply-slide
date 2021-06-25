@@ -9,7 +9,7 @@
 	position: relative;
 }
 
-.slider__button {
+.slider .slider__button {
 	border-radius: 50%;
 	border: 0;
 	bottom: calc(50% - var(--directionButtonSize) / 2);
@@ -23,7 +23,7 @@
 	align-items: center;
 }
 
-.slider__button span {
+.slider .slider__button span {
 	border-style: solid;
 	border-width: 0;
 	border-top-width: 3px;
@@ -32,27 +32,27 @@
 	width: calc(var(--directionButtonSize) / 5);
 }
 
-.slider__button__left {
+.slider .slider__button__left {
 	left: 20px;
 }
 
-.slider__button__left span {
+.slider .slider__button__left span {
 	border-left-width: 3px;
 	margin-left: calc(var(--directionButtonSize) / 10);
 	transform: rotate(-45deg);
 }
 
-.slider__button__right {
+.slider .slider__button__right {
 	right: 20px;
 }
 
-.slider__button__right span {
+.slider .slider__button__right span {
 	border-right-width: 3px;
 	margin-right: calc(var(--directionButtonSize) / 10);
 	transform: rotate(45deg);
 }
 
-.slider__dots-control {
+.slider .slider__dots-control {
 	bottom: 0;
 	display: flex;
 	justify-content: center;
@@ -64,13 +64,13 @@
 	width: 100%;
 }
 
-.slider__dots-control .slider__dots-control__dot {
+.slider .slider__dots-control .slider__dots-control__dot {
 	list-style: none;
 	margin: 5px;
 	z-index: 5;
 }
 
-.slider__dots-control .slider__dots-control__dot > button {
+.slider .slider__dots-control .slider__dots-control__dot > button {
 	border-radius: 50%;
 	border: 0;
 	cursor: pointer;
@@ -79,7 +79,7 @@
 	width: 10px;
 }
 
-.slider__container {
+.slider .slider__container {
 	box-sizing: border-box;
 	cursor: grab;
 	display: inline-flex;
@@ -89,27 +89,27 @@
 	transition: transform 0.3s ease-out;
 }
 
-.slider__container > .slider__slide + .slider__slide {
+.slider .slider__container > .slider__slide + .slider__slide {
 	margin-left: var(--gap);
 }
 
-.slider__slide {
+.slider .slider__slide {
 	box-sizing: border-box;
 	padding: 1rem;
 	user-select: none;
 	width: calc(100vw - var(--gap));
 }
 
-.slider__slide .slider__slide__image {
+.slider .slider__slide .slider__slide__image {
 	max-height: 60%;
 	max-width: 100%;
 	transition: transform 0.3s ease-in-out;
 }
 
-.slider__container--grabbing {
+.slider .slider__container--grabbing {
 	cursor: grabbing;
 }
 
-.slider__container--grabbing .slider__slide__image {
+.slider .slider__container--grabbing .slider__slide__image {
 	transform: scale(0.9);
 }
