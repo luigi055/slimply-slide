@@ -1,7 +1,7 @@
 {
 	"name": "@luigi055/simply-slide",
 	"version": "0.0.1",
-	"description": "\"simple and decoupled slide show with basic animation and touch controls\"",
+	"description": "simple and decoupled slide show with basic animation and touch controls",
 	"main": "dist/index.cjs.js",
 	"module": "dist/index.esm.js",
 	"files": [

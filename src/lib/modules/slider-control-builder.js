@@ -5,6 +5,7 @@ import {
 	SLIDER_BUTTON_RIGHT_CLASS,
 	SLIDER_DOTS_CONTROL_CLASS,
 } from "../constants";
+import { generateDotID } from "../utils";
 
 export default class SliderControlsBuilder {
 	constructor(sliderNode, options) {
@@ -29,7 +30,7 @@ export default class SliderControlsBuilder {
 		li.setAttribute("aria-controls", `slide-${index}`);
 		li.setAttribute(
 			"id",
-			`${this.sliderNode.getAttribute("id")}-dot-control-${index}`
+			generateDotID(this.sliderNode.getAttribute("id"), index)
 		);
 		li.classList.add(SLIDER_DOT_CLASS);
 		button.style.background = this.options.controlsColor;

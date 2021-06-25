@@ -4,6 +4,7 @@ import {
 	SLIDER_CONTAINER_CLASS,
 	SLIDER_SLIDE_CLASS,
 } from "../constants";
+import { generateDotID } from "../utils";
 
 export default class SlidesEngine {
 	constructor(slider, activeSlideManager) {
@@ -117,7 +118,7 @@ export default class SlidesEngine {
 			slide.setAttribute("role", "option");
 			slide.setAttribute(
 				"aria-describedby",
-				`${this._slider.getAttribute("id")}-dot-control-${index}`
+				generateDotID(this._slider.getAttribute("id"), index)
 			);
 
 			// Touch events
