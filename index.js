@@ -161,6 +161,8 @@ class Slides {
 		this._handleTouchEnd = this._handleTouchEnd.bind(this);
 		this._handleTouchMove = this._handleTouchMove.bind(this);
 		this._animation = this._animation.bind(this);
+		this.goNextSlide = this.goNextSlide.bind(this);
+		this.goPreviousSlide = this.goPreviousSlide.bind(this);
 
 		this.isDragging = false;
 		this.startPos = 0;
@@ -236,7 +238,7 @@ class Slides {
 	};
 
 	goNextSlide() {
-		const nextIndex = Math.min(this.currentIndex + 1, this.slides.length - 1);
+		const nextIndex = Math.min(this.currentIndex + 1, this._slides.length - 1);
 		this.setPositionByIndex(nextIndex);
 	}
 
@@ -275,6 +277,39 @@ class Slides {
 	}
 }
 
+class InitializeSlider {
+	constructor(slider, options) {
+		this._slider = slider;
+		this._options = options;
+		this._sliderControlsBuilder = new SliderControlsBuilder(
+			this._slider,
+			this._options
+		);
+		this._activeSlideManager = new ActiveSlideManager(
+			this._slider,
+			this._options
+		);
+		this._slides = new Slides(this._slider, this._activeSlideManager);
+	}
+
+	init() {
+		if (this._options.hasDotsControl === true) {
+			this._sliderControlsBuilder.createDotsControl(this._slides.slideNodes, {
+				onDotClick: this._slides.setPositionByIndex,
+			});
+		}
+
+		if (this._options.hasDirectionsButton === true) {
+			this._sliderControlsBuilder
+				.createLeftButton({ onClick: this._slides.goPreviousSlide })
+				.createRightButton({ onClick: this._slides.goNextSlide });
+		}
+
+		this._sliderControlsBuilder.build();
+		this._slides.generateSlides();
+	}
+}
+
 function setSlider({
 	node = null,
 	hasDotsControl = true,
@@ -287,31 +322,13 @@ function setSlider({
 	const slider = node;
 	slider.setAttribute("role", "toolbar");
 
-	const sliderControlsBuilder = new SliderControlsBuilder(slider, {
+	const slideShow = new InitializeSlider(slider, {
+		hasDotsControl,
+		hasDirectionsButton,
 		controlsColor,
 		controlsActiveColor,
 		directionIconColor,
 	});
-	const activeSlideManager = new ActiveSlideManager(slider, {
-		controlsColor,
-		controlsActiveColor,
-		hasDotsControl,
-	});
 
-	const slides = new Slides(slider, activeSlideManager);
-
-	if (hasDotsControl === true) {
-		sliderControlsBuilder.createDotsControl(slides.slideNodes, {
-			onDotClick: slides.setPositionByIndex,
-		});
-	}
-
-	if (hasDirectionsButton === true) {
-		sliderControlsBuilder
-			.createLeftButton({ onClick: slides.goPreviousSlide })
-			.createRightButton({ onClick: slides.goNextSlide });
-	}
-
-	sliderControlsBuilder.build();
-	slides.generateSlides();
+	slideShow.init();
 }
