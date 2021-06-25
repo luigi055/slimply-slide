@@ -106,6 +106,175 @@ class SliderControlsBuilder {
 	}
 }
 
+class ActiveSlideManager {
+	constructor(slider, options) {
+		this._slider = slider;
+		this.options = options;
+
+		this.replaceActiveSlide = this.replaceActiveSlide.bind(this);
+	}
+
+	_replaceActiveDot(index) {
+		const sliderControl = this._slider.querySelector(`.slider__dots-control`);
+		const previousActiveDot = sliderControl.querySelector(
+			'[aria-selected="true"]'
+		);
+
+		if (previousActiveDot) {
+			previousActiveDot.setAttribute("aria-selected", false);
+			previousActiveDot.querySelector("button").style.background =
+				this.options.controlsColor;
+		}
+
+		const newActiveDot = sliderControl.children[index];
+		newActiveDot.querySelector("button").style.background =
+			this.options.controlsActiveColor;
+		newActiveDot.setAttribute("aria-selected", true);
+	}
+
+	replaceActiveSlide(index) {
+		if (this.options.hasDotsControl) {
+			this._replaceActiveDot(index);
+		}
+		const activeSlide = this._slider.querySelector(
+			".slider__slide[aria-hidden='true']"
+		);
+		const slides = this._slider.querySelectorAll(".slider__slide");
+
+		if (activeSlide) {
+			activeSlide.setAttribute("aria-hidden", false);
+			activeSlide.setAttribute("aria-selected", false);
+		}
+
+		slides[index].setAttribute("aria-hidden", true);
+		slides[index].setAttribute("aria-selected", true);
+	}
+}
+
+class Slides {
+	constructor(slider, activeSlideManager) {
+		this._slider = slider;
+		this._activeSlideManager = activeSlideManager;
+		this._sliderContainer = this._slider.querySelector(".slider__container");
+		this._slides = this._slider.querySelectorAll(".slider__slide");
+		this._handleTouchStart = this._handleTouchStart.bind(this);
+		this._handleTouchEnd = this._handleTouchEnd.bind(this);
+		this._handleTouchMove = this._handleTouchMove.bind(this);
+		this._animation = this._animation.bind(this);
+
+		this.isDragging = false;
+		this.startPos = 0;
+		this.currentTranslate = 0;
+		this.prevTranslate = 0;
+		this.animationID = 0;
+		this.currentIndex = 0;
+	}
+
+	get slideNodes() {
+		return this._slides;
+	}
+
+	_getPositionX(event) {
+		return event.type.includes("mouse")
+			? event.pageX
+			: event.touches[0].clientX;
+	}
+
+	_setSliderPosition() {
+		this._sliderContainer.style.transform = `translateX(${this.currentTranslate}px)`;
+	}
+
+	_animation() {
+		this._setSliderPosition();
+		if (this.isDragging) requestAnimationFrame(this._animation);
+	}
+
+	_handleTouchStart(index) {
+		const event = (event) => {
+			this.currentIndex = index;
+			this.startPos = this._getPositionX(event);
+			this.isDragging = true;
+
+			// https://css-tricks.com/using-requestanimationframe/
+			this.animationID = requestAnimationFrame(this._animation);
+			this._sliderContainer.classList.add("slider__container--grabbing");
+		};
+
+		return event.bind(this);
+	}
+
+	_handleTouchEnd() {
+		this.isDragging = false;
+		cancelAnimationFrame.call(window, this.animationID);
+
+		const movedBy = this.currentTranslate - this.prevTranslate;
+		if (movedBy < -100 && this.currentIndex < this._slides.length - 1) {
+			this.currentIndex += 1;
+		}
+		if (movedBy > 100 && this.currentIndex > 0) {
+			this.currentIndex -= 1;
+		}
+
+		this.setPositionByIndex(this.currentIndex);
+		this._sliderContainer.classList.remove("slider__container--grabbing");
+	}
+
+	_handleTouchMove(event) {
+		if (this.isDragging) {
+			const currentPosition = this._getPositionX(event);
+			this.currentTranslate =
+				this.prevTranslate + currentPosition - this.startPos;
+		}
+	}
+
+	setPositionByIndex = (index) => {
+		this.currentTranslate = index * -window.innerWidth;
+		this.prevTranslate = this.currentTranslate;
+		this.currentIndex = index;
+		this._setSliderPosition();
+		this._activeSlideManager.replaceActiveSlide(index);
+	};
+
+	goNextSlide() {
+		const nextIndex = Math.min(this.currentIndex + 1, this.slides.length - 1);
+		this.setPositionByIndex(nextIndex);
+	}
+
+	goPreviousSlide() {
+		const previousIndex = Math.max(this.currentIndex - 1, 0);
+		this.setPositionByIndex(previousIndex);
+	}
+
+	generateSlides() {
+		Array.from(this._slides).forEach((slide, index) => {
+			const slideImage = slide.querySelector(".slider__slide__image");
+			if (slideImage) {
+				slideImage.addEventListener("dragstart", (e) => e.preventDefault());
+			}
+
+			slide.setAttribute("aria-hidden", false);
+			slide.setAttribute("role", "option");
+			slide.setAttribute(
+				"aria-describedby",
+				`${this._slider.getAttribute("id")}-dot-control-${index}`
+			);
+
+			// Touch events
+			slide.addEventListener("touchstart", this._handleTouchStart(index));
+			slide.addEventListener("touchend", this._handleTouchEnd);
+			slide.addEventListener("touchmove", this._handleTouchMove);
+
+			// Mouse events
+			slide.addEventListener("mousedown", this._handleTouchStart(index));
+			slide.addEventListener("mouseup", this._handleTouchEnd);
+			slide.addEventListener("mouseleave", this._handleTouchEnd);
+			slide.addEventListener("mousemove", this._handleTouchMove);
+		});
+
+		this._activeSlideManager.replaceActiveSlide(this.currentIndex);
+	}
+}
+
 function setSlider({
 	node = null,
 	hasDotsControl = true,
@@ -117,165 +286,32 @@ function setSlider({
 	if (!node) return;
 	const slider = node;
 	slider.setAttribute("role", "toolbar");
-	const sliderContainer = slider.querySelector(".slider__container");
-	const slides = Array.from(slider.querySelectorAll(".slider__slide"));
-	const sliderControls = new SliderControlsBuilder(slider, {
+
+	const sliderControlsBuilder = new SliderControlsBuilder(slider, {
 		controlsColor,
 		controlsActiveColor,
 		directionIconColor,
 	});
-
-	let isDragging = false;
-	let startPos = 0;
-	let currentTranslate = 0;
-	let prevTranslate = 0;
-	let animationID = 0;
-	let currentIndex = 0;
-
-	const handleButtonLeft = () => {
-		const previousIndex = Math.max(currentIndex - 1, 0);
-		setPositionByIndex(previousIndex);
-	};
-	const handleButtonRight = () => {
-		const nextIndex = Math.min(currentIndex + 1, slides.length - 1);
-		setPositionByIndex(nextIndex);
-	};
-
-	const setPositionByIndex = (index) => {
-		currentTranslate = index * -window.innerWidth;
-		prevTranslate = currentTranslate;
-		currentIndex = index;
-		setSliderPosition();
-		replaceActiveSlide(index);
-	};
-
-	if (hasDotsControl === true) {
-		sliderControls.createDotsControl(slides, {
-			onDotClick: setPositionByIndex,
-		});
-	}
-	if (hasDirectionsButton === true) {
-		sliderControls
-			.createLeftButton({ onClick: handleButtonLeft })
-			.createRightButton({ onClick: handleButtonRight });
-	}
-
-	sliderControls.build();
-	replaceActiveSlide(currentIndex);
-
-	slides.forEach((slide, index) => {
-		const slideImage = slide.querySelector(".slider__slide__image");
-		if (slideImage) {
-			slideImage.addEventListener("dragstart", (e) => e.preventDefault());
-		}
-
-		slide.setAttribute("aria-hidden", false);
-		slide.setAttribute("role", "option");
-		slide.setAttribute(
-			"aria-describedby",
-			`${slider.getAttribute("id")}-dot-control-${index}`
-		);
-
-		// Touch events
-		slide.addEventListener("touchstart", touchStart(index));
-		slide.addEventListener("touchend", touchEnd);
-		slide.addEventListener("touchmove", touchMove);
-
-		// Mouse events
-		slide.addEventListener("mousedown", touchStart(index));
-		slide.addEventListener("mouseup", touchEnd);
-		slide.addEventListener("mouseleave", touchEnd);
-		slide.addEventListener("mousemove", touchMove);
+	const activeSlideManager = new ActiveSlideManager(slider, {
+		controlsColor,
+		controlsActiveColor,
+		hasDotsControl,
 	});
 
-	// Disable context menu
-	window.oncontextmenu = function (event) {
-		event.preventDefault();
-		event.stopPropagation();
-		return false;
-	};
+	const slides = new Slides(slider, activeSlideManager);
 
-	function touchStart(index) {
-		return function (event) {
-			currentIndex = index;
-			startPos = getPositionX(event);
-			isDragging = true;
-
-			// https://css-tricks.com/using-requestanimationframe/
-			animationID = requestAnimationFrame(animation);
-			sliderContainer.classList.add("slider__container--grabbing");
-		};
+	if (hasDotsControl === true) {
+		sliderControlsBuilder.createDotsControl(slides.slideNodes, {
+			onDotClick: slides.setPositionByIndex,
+		});
 	}
 
-	function touchEnd() {
-		isDragging = false;
-		cancelAnimationFrame(animationID);
-
-		const movedBy = currentTranslate - prevTranslate;
-		if (movedBy < -100 && currentIndex < slides.length - 1) currentIndex += 1;
-		if (movedBy > 100 && currentIndex > 0) currentIndex -= 1;
-
-		setPositionByIndex(currentIndex);
-
-		sliderContainer.classList.remove("slider__container--grabbing");
+	if (hasDirectionsButton === true) {
+		sliderControlsBuilder
+			.createLeftButton({ onClick: slides.goPreviousSlide })
+			.createRightButton({ onClick: slides.goNextSlide });
 	}
 
-	function touchMove(event) {
-		if (isDragging) {
-			const currentPosition = getPositionX(event);
-			currentTranslate = prevTranslate + currentPosition - startPos;
-		}
-	}
-
-	function getPositionX(event) {
-		return event.type.includes("mouse")
-			? event.pageX
-			: event.touches[0].clientX;
-	}
-
-	function animation() {
-		setSliderPosition();
-		if (isDragging) requestAnimationFrame(animation);
-	}
-
-	function setSliderPosition() {
-		sliderContainer.style.transform = `translateX(${currentTranslate}px)`;
-	}
-
-	function replaceActiveDot(index) {
-		const sliderControl = slider.querySelector(
-			`.${sliderControls.sliderDotControlClass}`
-		);
-		const previousActiveDot = sliderControl.querySelector(
-			'[aria-selected="true"]'
-		);
-
-		if (previousActiveDot) {
-			previousActiveDot.setAttribute("aria-selected", false);
-			previousActiveDot.querySelector("button").style.background =
-				controlsColor;
-		}
-
-		const newActiveDot = sliderControl.children[index];
-		newActiveDot.querySelector("button").style.background = controlsActiveColor;
-		newActiveDot.setAttribute("aria-selected", true);
-	}
-
-	function replaceActiveSlide(index) {
-		if (hasDotsControl) {
-			replaceActiveDot(index);
-		}
-		const activeSlide = slider.querySelector(
-			".slider__slide[aria-hidden='true']"
-		);
-		const slides = slider.querySelectorAll(".slider__slide");
-
-		if (activeSlide) {
-			activeSlide.setAttribute("aria-hidden", false);
-			activeSlide.setAttribute("aria-selected", false);
-		}
-
-		slides[index].setAttribute("aria-hidden", true);
-		slides[index].setAttribute("aria-selected", true);
-	}
+	sliderControlsBuilder.build();
+	slides.generateSlides();
 }
