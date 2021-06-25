@@ -1,12 +1,17 @@
 import InitializeSlider from "./lib/slider-initializer";
+import {
+	DEFAULT_CONTROLS_COLOR,
+	DEFAULT_CONTROLS_ACTIVE_COLOR,
+	DEFAULT_DIRECTION_ICONS_COLOR,
+} from "./constants";
 
 export function setSlider({
 	node = null,
 	hasDotsControl = true,
 	hasDirectionsButton = true,
-	controlsColor = "#3335",
-	controlsActiveColor = "#333c",
-	directionIconColor = "#efefef",
+	controlsColor = DEFAULT_CONTROLS_COLOR,
+	controlsActiveColor = DEFAULT_CONTROLS_ACTIVE_COLOR,
+	directionIconColor = DEFAULT_DIRECTION_ICONS_COLOR,
 }) {
 	if (!node) return;
 

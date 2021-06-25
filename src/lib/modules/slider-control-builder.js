@@ -45,7 +45,7 @@ export default class SliderControlsBuilder {
 		return icon;
 	}
 
-	createLeftButton({ onClick = () => {} }) {
+	createLeftButton({ onClick }) {
 		this._generateDirectionIcon();
 		this.sliderButtonLeft = document.createElement("button");
 		this.sliderButtonLeft.classList.add(
@@ -62,7 +62,7 @@ export default class SliderControlsBuilder {
 		return this;
 	}
 
-	createRightButton({ onClick = () => {} }) {
+	createRightButton({ onClick }) {
 		this.sliderButtonRight = document.createElement("button");
 		this.sliderButtonRight.classList.add(
 			SLIDER_BUTTON_CLASS,
