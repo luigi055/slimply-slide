@@ -75,7 +75,7 @@ export default class SlidesEngine {
 			this.currentIndex -= 1;
 		}
 
-		this.setPositionByIndex(this.currentIndex);
+		this._setPositionByIndex(this.currentIndex);
 		this._sliderContainer.classList.remove(
 			SLIDER_CONTAINER_GRABBING_STATUS_CLASS
 		);
@@ -89,7 +89,7 @@ export default class SlidesEngine {
 		}
 	}
 
-	setPositionByIndex = (index) => {
+	_setPositionByIndex = (index) => {
 		this.currentTranslate = index * -window.innerWidth;
 		this.prevTranslate = this.currentTranslate;
 		this.currentIndex = index;
@@ -99,12 +99,12 @@ export default class SlidesEngine {
 
 	goNextSlide() {
 		const nextIndex = Math.min(this.currentIndex + 1, this._slides.length - 1);
-		this.setPositionByIndex(nextIndex);
+		this._setPositionByIndex(nextIndex);
 	}
 
 	goPreviousSlide() {
 		const previousIndex = Math.max(this.currentIndex - 1, 0);
-		this.setPositionByIndex(previousIndex);
+		this._setPositionByIndex(previousIndex);
 	}
 
 	generateSlides() {

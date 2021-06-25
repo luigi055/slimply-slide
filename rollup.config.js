@@ -13,13 +13,13 @@ export default [
 			del({ targets: "dist/*" }),
 			externals({ deps: true }),
 			nodeResolve({
-				extensions: [".js", ".ts", ".tsx"],
+				extensions: [".js"],
 			}),
 			commonjs(),
 			babel({
 				babelHelpers: "runtime",
 				exclude: "**/node_modules/**",
-				extensions: [".js", ".jsx", ".ts", ".tsx"],
+				extensions: [".js"],
 			}),
 			copy({
 				targets: [

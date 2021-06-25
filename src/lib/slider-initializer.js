@@ -4,6 +4,7 @@ import SlidesEngine from "./modules/slides-engine";
 
 export default class SliderInitializer {
 	constructor(slider, options) {
+		console.warn(slider, "hello");
 		this._slider = slider;
 		this._options = options;
 		this._sliderControlsBuilder = new SliderControlsBuilder(
