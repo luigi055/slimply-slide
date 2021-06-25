@@ -106,6 +106,10 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="slider" id="slider4">
+			<div class="slider__container"></div>
+		</div>
 		<script src="../dist/simply-slide.js"></script>
 		<script>
 			document.addEventListener("DOMContentLoaded", function (event) {
@@ -116,11 +120,15 @@
 					directionIconColor: "#333",
 				});
 				simplySlide.setSlider({
-					node: document.getElementById("slider3"),
-				});
-				simplySlide.setSlider({
 					node: document.getElementById("slider2"),
 					hasDotsControl: false,
+				});
+				simplySlide.setSlider({
+					node: document.getElementById("slider3"),
+				});
+
+				simplySlide.setSlider({
+					node: document.getElementById("slider4"),
 				});
 			});
 		</script>

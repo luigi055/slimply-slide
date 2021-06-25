@@ -2,19 +2,8 @@
  * @jest-environment jsdom
  */
 
-import {
-	getByLabelText,
-	getByText,
-	getByTestId,
-	queryByTestId,
-	// Tip: all queries are also exposed on an object
-	// called "queries" which you could import here as well
-	waitFor,
-	screen,
-	fireEvent,
-} from "@testing-library/dom";
 import "@testing-library/jest-dom/extend-expect";
-import SliderInitializer from "./lib/slider-initializer";
+import { getByTestId, queryByTestId, fireEvent } from "@testing-library/dom";
 import { setSlider } from "./index";
 import {
 	DEFAULT_CONTROLS_COLOR,
@@ -591,4 +580,89 @@ describe("Testing the simplySlide widget", () => {
 			});
 		}); // Testing slides jumping through slides END
 	}); // Testing Slides END
+
+	describe("Testing Touch events", () => {
+		function touchTo(slide, initialX = 0, moveX = 0) {
+			const touchstart = [{ clientX: initialX, clientY: 0 }];
+			const touchMove = [{ clientX: moveX, clientY: 0 }];
+			fireEvent.touchStart(slide, { touches: touchstart });
+			fireEvent.touchMove(slide, { touches: touchMove });
+			fireEvent.touchEnd(slide, { touches: touchMove });
+		}
+
+		beforeEach(() => {
+			let count = 0;
+			jest.spyOn(window, "requestAnimationFrame").mockImplementation((cb) => {
+				if (count < 1) {
+					count = 1;
+					cb();
+				}
+				return 15;
+			});
+		});
+
+		afterEach(() => {
+			window.requestAnimationFrame.mockRestore();
+		});
+
+		it("should no move to the second slide when move the first slide but never start", async () => {
+			const slider = container.querySelector("#slider1");
+			setSlider({ node: slider });
+
+			const sliderDotsControl = getByTestId(container, sliderDotsControlTestId);
+
+			const slideOne = getByTestId(container, slideOneTestId);
+			const slideTwo = getByTestId(container, slideTwoTestId);
+			const slideThree = getByTestId(container, slideThreeTestId);
+
+			const touchMove = [{ clientX: -150, clientY: 0 }];
+
+			fireEvent.touchMove(slideOne, { touches: touchMove });
+			fireEvent.touchEnd(slideOne, { touches: touchMove });
+
+			expect(slideOne).toHaveAttribute("aria-selected", "true");
+			expect(slideTwo).toHaveAttribute("aria-selected", "false");
+			expect(slideThree).toHaveAttribute("aria-selected", "false");
+		});
+
+		it("should move to the second slide", async () => {
+			const slider = container.querySelector("#slider1");
+			setSlider({ node: slider });
+
+			const sliderDotsControl = getByTestId(container, sliderDotsControlTestId);
+
+			const slideOne = getByTestId(container, slideOneTestId);
+			const slideTwo = getByTestId(container, slideTwoTestId);
+			const slideThree = getByTestId(container, slideThreeTestId);
+
+			touchTo(slideOne, 0, -150);
+
+			expect(slideOne).toHaveAttribute("aria-selected", "false");
+			expect(slideTwo).toHaveAttribute("aria-selected", "true");
+			expect(slideThree).toHaveAttribute("aria-selected", "false");
+		});
+
+		it("should move to the third slide and go back to the second", async () => {
+			const slider = container.querySelector("#slider1");
+			setSlider({ node: slider });
+
+			const sliderDotsControl = getByTestId(container, sliderDotsControlTestId);
+
+			const slideOne = getByTestId(container, slideOneTestId);
+			const slideTwo = getByTestId(container, slideTwoTestId);
+			const slideThree = getByTestId(container, slideThreeTestId);
+
+			touchTo(slideTwo, 0, -150);
+
+			expect(slideOne).toHaveAttribute("aria-selected", "false");
+			expect(slideTwo).toHaveAttribute("aria-selected", "false");
+			expect(slideThree).toHaveAttribute("aria-selected", "true");
+
+			touchTo(slideThree, 0, 150);
+
+			expect(slideOne).toHaveAttribute("aria-selected", "false");
+			expect(slideTwo).toHaveAttribute("aria-selected", "true");
+			expect(slideThree).toHaveAttribute("aria-selected", "false");
+		});
+	});
 });

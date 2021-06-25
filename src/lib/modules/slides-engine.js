@@ -22,7 +22,7 @@ export default class SlidesEngine {
 		this.goPreviousSlide = this.goPreviousSlide.bind(this);
 
 		this.isDragging = false;
-		this.startPos = 0;
+		this.startPosition = 0;
 		this.currentTranslate = 0;
 		this.prevTranslate = 0;
 		this.animationID = 0;
@@ -51,7 +51,7 @@ export default class SlidesEngine {
 	_handleTouchStart(index) {
 		const event = (event) => {
 			this.currentIndex = index;
-			this.startPos = this._getPositionX(event);
+			this.startPosition = this._getPositionX(event);
 			this.isDragging = true;
 
 			this.animationID = requestAnimationFrame(this._animation);
@@ -59,7 +59,6 @@ export default class SlidesEngine {
 				SLIDER_CONTAINER_GRABBING_STATUS_CLASS
 			);
 		};
-
 		return event.bind(this);
 	}
 
@@ -85,7 +84,7 @@ export default class SlidesEngine {
 		if (this.isDragging) {
 			const currentPosition = this._getPositionX(event);
 			this.currentTranslate =
-				this.prevTranslate + currentPosition - this.startPos;
+				this.prevTranslate + currentPosition - this.startPosition;
 		}
 	}
 
