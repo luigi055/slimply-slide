@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Simply slide - Basic example</title>
+		<link
+			rel="stylesheet"
+			href="https://unpkg.com/simply-slide@0.0.2/dist/simply-slide.css"
+		/>
+	</head>
+	<body>
+		<div class="slider" id="slider1">
+			<div class="slider__container">
+				<div class="slider__slide"><span>1</span></div>
+				<div class="slider__slide"><span>2</span></div>
+				<div class="slider__slide"><span>3</span></div>
+			</div>
+		</div>
+
+		<script src="https://unpkg.com/simply-slide@0.0.2/dist/simply-slide.js"></script>
+		<script>
+			document.addEventListener("DOMContentLoaded", function (event) {
+				simplySlide.setSlider({
+					node: document.getElementById("slider1"),
+				});
+			});
+		</script>
+	</body>
+</html>
