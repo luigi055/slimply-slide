@@ -10,25 +10,26 @@
 }
 
 .slider .slider__button {
+	align-items: center;
 	border-radius: 50%;
 	border: 0;
 	bottom: calc(50% - var(--directionButtonSize) / 2);
 	cursor: pointer;
+	display: flex;
 	height: var(--directionButtonSize);
+	justify-content: center;
 	position: absolute;
 	width: var(--directionButtonSize);
 	z-index: 5;
-	display: flex;
-	justify-content: center;
-	align-items: center;
 }
 
 .slider .slider__button span {
 	border-style: solid;
 	border-width: 0;
 	border-top-width: 3px;
-	margin-bottom: 1px;
+	box-sizing: content-box;
 	height: calc(var(--directionButtonSize) / 5);
+	margin-bottom: 1px;
 	width: calc(var(--directionButtonSize) / 5);
 }
 

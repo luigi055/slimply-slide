@@ -1,3 +1,9 @@
+*,
+*::after,
+*::before {
+	box-sizing: border-box;
+}
+
 .blog__gallery {
 	width: 300px;
 	height: 150px;
