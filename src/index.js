@@ -9,7 +9,6 @@ export function setSlider({
 	node = null,
 	hasDirectionsButton = true,
 	controlsColor = DEFAULT_CONTROLS_COLOR,
-	controlsActiveColor = DEFAULT_CONTROLS_ACTIVE_COLOR,
 	directionIconColor = DEFAULT_DIRECTION_ICONS_COLOR,
 }) {
 	if (!node) return;
@@ -17,7 +16,6 @@ export function setSlider({
 	const slideShow = new InitializeSlider(node, {
 		hasDirectionsButton,
 		controlsColor,
-		controlsActiveColor,
 		directionIconColor,
 	});
 

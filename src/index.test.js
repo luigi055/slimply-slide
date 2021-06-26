@@ -120,13 +120,11 @@ describe("Testing the simplySlide widget", () => {
 		it("should set custom the colors for controls", () => {
 			const slider = container.querySelector("#slider1");
 			const controlsColor = "#f905";
-			const controlsActiveColor = "#f90";
 			const directionIconColor = "#333";
 
 			setSlider({
 				node: slider,
 				controlsColor,
-				controlsActiveColor,
 				directionIconColor,
 			});
 			const nextSlideButton = getByTestId(container, nextSlideButtonTestId);

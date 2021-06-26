@@ -19,7 +19,6 @@ function initializeSlider(element) {
 		const slide = simplySlide.setSlider({
 			node: element,
 			controlsColor: "#f905",
-			controlsActiveColor: "#f90",
 			directionIconColor: "#333",
 		});
 
