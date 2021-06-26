@@ -15,9 +15,20 @@ const testSliderTestId = "test-slider";
 const slideOneTestId = "slide-1";
 const slideTwoTestId = "slide-2";
 const slideThreeTestId = "slide-3";
+const slideFourTestId = "slide-4";
 const nextSlideButtonTestId = "next-slide-button";
 const previousSlideButtonTestId = "previous-slide-button";
-const sliderDotsControlTestId = "slider-dots-control";
+
+const createSlide = (content) => {
+	const slide = document.createElement("div");
+	slide.classList.add("slider__slide");
+	slide.setAttribute("data-testid", `slide-${content}`);
+	slide.innerHTML = `
+					<span class="slider__slide__image">${content}</span>
+				`;
+
+	return slide;
+};
 
 function slideshowDOM() {
 	const div = document.createElement("div");
@@ -293,6 +304,51 @@ describe("Testing the simplySlide widget", () => {
 			});
 		}); // Testing slides  END
 	}); // Testing Slides END
+
+	describe("Testing add slide dynamically", () => {
+		it("should add a new slide", () => {
+			const slider = container.querySelector("#slider1");
+			const slide = setSlider({ node: slider });
+
+			let slideFour = queryByTestId(container, slideFourTestId);
+			expect(slideFour).not.toBeTruthy();
+
+			slide.addLazy(createSlide(4));
+
+			slideFour = queryByTestId(container, slideFourTestId);
+			expect(slideFour).toBeTruthy();
+		});
+
+		it("should enrich the new slide", () => {
+			const slider = container.querySelector("#slider1");
+			const slide = setSlider({ node: slider });
+
+			slide.addLazy(createSlide(4));
+
+			let slideFour = getByTestId(container, slideFourTestId);
+
+			expect(slideFour).toHaveAttribute("aria-selected", "false");
+			expect(slideFour).toHaveAttribute("aria-hidden", "true");
+			expect(slideFour).toHaveAttribute("role", "option");
+		});
+
+		it("should show the slide when the user go to the four slide", () => {
+			const slider = container.querySelector("#slider1");
+			const slide = setSlider({ node: slider });
+
+			slide.addLazy(createSlide(4));
+
+			let slideFour = getByTestId(container, slideFourTestId);
+			const nextSlideButton = getByTestId(container, nextSlideButtonTestId);
+
+			nextSlideButton.click();
+			nextSlideButton.click();
+			nextSlideButton.click();
+
+			expect(slideFour).toHaveAttribute("aria-selected", "true");
+			expect(slideFour).toHaveAttribute("aria-hidden", "false");
+		});
+	});
 
 	describe("Testing Touch events", () => {
 		function touchTo(slide, initialX = 0, moveX = 0) {
