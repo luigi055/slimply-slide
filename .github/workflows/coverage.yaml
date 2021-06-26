@@ -1,8 +1,10 @@
 name: "coverage"
 on:
-  pull_request:
+  workflow_dispatch:
+  push:
     branches:
-      - master
+      - main
+
 jobs:
   coverage:
     runs-on: ubuntu-latest
