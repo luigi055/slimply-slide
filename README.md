@@ -163,3 +163,51 @@ _Use this class utils with the slide directly_
 ```
 
 [Basic example centered](https://simply-slide.surge.sh/basic-centered.html)
+
+### You can change some parameters of the slider
+
+```
+import { setSlider } from "simply-slide";
+
+setSlider({
+  node: document.querySelector("#slider1")
+  hasDirectionsButton: true, // true by default. it shows the direction buttons
+	controlsColor: "#3335", // change the color of the direction buttons
+	directionIconColor: "#efefef // change the color of the button icon
+})
+```
+
+### Add more slides dynamically
+
+Once define your slide with `setSlide` it returns and instance of the slide where you can have access to extra functionalities in run time.
+
+so far there is just one functionality; `addLazy(DOMElement)` which you could use to add new slides dynamically with out the need to re render the entire slide.
+
+```
+import { setSlider } from "simply-slide";
+
+const newSlide = document.createElemnent(div)
+newSlide.classList.add("slider__slide")
+newSlide.innerHTML = "<span>4</span>"
+
+const slider = setSlider({
+  node: document.querySelector("#slider1")
+})
+
+setTimeout(() => {
+  slider.addLazy(newSlide)
+}, 3000)
+
+```
+
+You can see this feature in action in this blog template example.
+
+Notice that you have some images in the slider in the beginning, when you click in the get more images it adds more images dynamically.
+
+[Add images dynamically ](http://the-photo-blog.surge.sh/)
+
+## License
+
+[MIT](https://opensource.org/licenses/MIT)
+
+Copyright (c) 2013-present, Yuxi (Evan) You
