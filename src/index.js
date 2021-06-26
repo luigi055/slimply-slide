@@ -4,6 +4,7 @@ import {
 	DEFAULT_CONTROLS_ACTIVE_COLOR,
 	DEFAULT_DIRECTION_ICONS_COLOR,
 } from "./constants";
+import { Console } from "console";
 
 export function setSlider({
 	node = null,
@@ -23,5 +24,5 @@ export function setSlider({
 		directionIconColor,
 	});
 
-	slideShow.init();
+	return slideShow.init();
 }

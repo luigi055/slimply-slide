@@ -8,6 +8,10 @@ export default class ActiveSlideManager {
 		this.replaceActiveSlide = this.replaceActiveSlide.bind(this);
 	}
 
+	regenerateSlides(slider) {
+		this._slider = slider;
+	}
+
 	_replaceActiveDot(index) {
 		const sliderControl = this._slider.querySelector(
 			`.${SLIDER_DOTS_CONTROL_CLASS}`

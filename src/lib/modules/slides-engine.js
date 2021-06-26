@@ -73,7 +73,6 @@ export default class SlidesEngine {
 		if (movedBy > 100 && this.currentIndex > 0) {
 			this.currentIndex -= 1;
 		}
-
 		this.setPositionByIndex(this.currentIndex);
 		this._sliderContainer.classList.remove(
 			SLIDER_CONTAINER_GRABBING_STATUS_CLASS
@@ -106,32 +105,45 @@ export default class SlidesEngine {
 		this.setPositionByIndex(previousIndex);
 	}
 
+	createSlide(slide, index) {
+		const slideImage = slide.querySelector(`.${SLIDER_SLIDE_IMAGE_CLASS}`);
+		if (slideImage) {
+			slideImage.addEventListener("dragstart", (e) => e.preventDefault());
+		}
+
+		slide.setAttribute("aria-hidden", true);
+		slide.setAttribute("aria-selected", false);
+		slide.setAttribute("id", `slide-${index}`);
+		slide.setAttribute("role", "option");
+		slide.setAttribute(
+			"aria-describedby",
+			generateDotID(this._slider.getAttribute("id"), index)
+		);
+
+		// Touch events
+		slide.addEventListener("touchstart", this._handleTouchStart(index));
+		slide.addEventListener("touchend", this._handleTouchEnd);
+		slide.addEventListener("touchmove", this._handleTouchMove);
+
+		// Mouse events
+		slide.addEventListener("mousedown", this._handleTouchStart(index));
+		slide.addEventListener("mouseup", this._handleTouchEnd);
+		slide.addEventListener("mouseleave", this._handleTouchEnd);
+		slide.addEventListener("mousemove", this._handleTouchMove);
+	}
+
+	regenerateSlides(slider, slide) {
+		this._slider = slider;
+		this._sliderContainer = this._slider.querySelector(
+			`.${SLIDER_CONTAINER_CLASS}`
+		);
+		this._slides = this._slider.querySelectorAll(`.${SLIDER_SLIDE_CLASS}`);
+		this.createSlide(slide, this._slides.length - 1);
+	}
+
 	generateSlides() {
 		Array.from(this._slides).forEach((slide, index) => {
-			const slideImage = slide.querySelector(`.${SLIDER_SLIDE_IMAGE_CLASS}`);
-			if (slideImage) {
-				slideImage.addEventListener("dragstart", (e) => e.preventDefault());
-			}
-
-			slide.setAttribute("aria-hidden", true);
-			slide.setAttribute("aria-selected", false);
-			slide.setAttribute("id", `slide-${index}`);
-			slide.setAttribute("role", "option");
-			slide.setAttribute(
-				"aria-describedby",
-				generateDotID(this._slider.getAttribute("id"), index)
-			);
-
-			// Touch events
-			slide.addEventListener("touchstart", this._handleTouchStart(index));
-			slide.addEventListener("touchend", this._handleTouchEnd);
-			slide.addEventListener("touchmove", this._handleTouchMove);
-
-			// Mouse events
-			slide.addEventListener("mousedown", this._handleTouchStart(index));
-			slide.addEventListener("mouseup", this._handleTouchEnd);
-			slide.addEventListener("mouseleave", this._handleTouchEnd);
-			slide.addEventListener("mousemove", this._handleTouchMove);
+			this.createSlide(slide, index);
 		});
 
 		this._activeSlideManager.replaceActiveSlide(this.currentIndex);

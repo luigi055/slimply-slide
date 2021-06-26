@@ -1,3 +1,4 @@
+import { createElement } from "parse5/lib/tree-adapters/default";
 import {
 	SLIDER_DOT_CLASS,
 	SLIDER_BUTTON_CLASS,
@@ -97,7 +98,15 @@ export default class SliderControlsBuilder {
 			this.sliderNode.appendChild(this.sliderButtonLeft);
 		if (this.sliderButtonRight)
 			this.sliderNode.appendChild(this.sliderButtonRight);
-		if (this.sliderDotsControl)
+		if (this.sliderDotsControl) {
+			if (this.sliderNode.querySelector(`.${SLIDER_DOTS_CONTROL_CLASS}`)) {
+				this.sliderNode.replaceChild(
+					this.sliderDotsControl,
+					this.sliderNode.querySelector(`.${SLIDER_DOTS_CONTROL_CLASS}`)
+				);
+				return;
+			}
 			this.sliderNode.appendChild(this.sliderDotsControl);
+		}
 	}
 }

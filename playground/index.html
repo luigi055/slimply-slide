@@ -6,103 +6,39 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Simple slide show</title>
 		<link rel="stylesheet" href="../dist/simply-slide.css" />
+		<style>
+			.my_slide {
+				width: 400px;
+				height: 200px;
+			}
+		</style>
 	</head>
 	<body>
-		<div class="slider" id="slider1">
-			<div class="slider__container">
-				<div class="slider__slide">1</div>
-				<div class="slider__slide">2</div>
-				<div class="slider__slide">3</div>
-			</div>
-		</div>
-		<div class="slider" id="slider2">
+		<div class="slider my_slide" id="slider1">
 			<div class="slider__container">
 				<div class="slider__slide">
-					<h2>Airpods</h2>
-					<h4>$199</h4>
 					<img
 						class="slider__slide__image"
-						src="https://i.ibb.co/y08W0Jx/image1.png"
+						loading="lazy"
 						alt=""
+						src="https://images.unsplash.com/photo-1621569899609-e6ca91a72f97?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyNDIyNjB8MXwxfGFsbHwxfHx8fHx8Mnx8MTYyNDY1ODgyNw&ixlib=rb-1.2.1&q=80&w=400&fit=max"
 					/>
-					<a href="#" class="btn">Buy Now</a>
 				</div>
 				<div class="slider__slide">
-					<h2>iPhone 12</h2>
-					<h4>$799</h4>
 					<img
 						class="slider__slide__image"
-						src="https://i.ibb.co/NYdGg2q/image2.png"
+						src="https://images.unsplash.com/photo-1621569899609-e6ca91a72f97?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyNDIyNjB8MXwxfGFsbHwxfHx8fHx8Mnx8MTYyNDY1ODgyNw&ixlib=rb-1.2.1&q=80&w=400&fit=max"
+						loading="lazy"
 						alt=""
 					/>
-					<a href="#" class="btn">Buy Now</a>
 				</div>
 				<div class="slider__slide">
-					<h2>iPhone 12</h2>
-					<h4>$799</h4>
 					<img
 						class="slider__slide__image"
-						src="https://i.ibb.co/NYdGg2q/image2.png"
+						src="https://images.unsplash.com/photo-1621569899609-e6ca91a72f97?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyNDIyNjB8MXwxfGFsbHwxfHx8fHx8Mnx8MTYyNDY1ODgyNw&ixlib=rb-1.2.1&q=80&w=400&fit=max"
+						loading="lazy"
 						alt=""
 					/>
-					<a href="#" class="btn">Buy Now</a>
-				</div>
-				<div class="slider__slide">
-					<h2>iPhone 12</h2>
-					<h4>$799</h4>
-					<img
-						class="slider__slide__image"
-						src="https://i.ibb.co/NYdGg2q/image2.png"
-						alt=""
-					/>
-					<a href="#" class="btn">Buy Now</a>
-				</div>
-				<div class="slider__slide">
-					<h2>iPad</h2>
-					<h4>$599</h4>
-					<img
-						class="slider__slide__image"
-						src="https://i.ibb.co/Jd3t4hQ/image3.png"
-						alt=""
-					/>
-					<a href="#" class="btn">Buy Now</a>
-				</div>
-			</div>
-		</div>
-		<div class="slider" id="slider3">
-			<div class="slider__container">
-				<div class="slider__slide">
-					<span>
-						<h2>Airpods</h2>
-						<h4>$199</h4>
-						<img
-							class="slider__slide__image"
-							src="https://i.ibb.co/y08W0Jx/image1.png"
-							alt=""
-						/>
-						<a href="#" class="btn">Buy Now</a>
-					</span>
-				</div>
-
-				<div class="slider__slide">
-					<h2>iPhone 12</h2>
-					<h4>$799</h4>
-					<img
-						class="slider__slide__image"
-						src="https://i.ibb.co/NYdGg2q/image2.png"
-						alt=""
-					/>
-					<a href="#" class="btn">Buy Now</a>
-				</div>
-				<div class="slider__slide">
-					<h2>iPad</h2>
-					<h4>$599</h4>
-					<img
-						class="slider__slide__image"
-						src="https://i.ibb.co/Jd3t4hQ/image3.png"
-						alt=""
-					/>
-					<a href="#" class="btn">Buy Now</a>
 				</div>
 			</div>
 		</div>
@@ -112,25 +48,47 @@
 		</div>
 		<script src="../dist/simply-slide.js"></script>
 		<script>
+			const createImageSlide = (image) => {
+				const slide = document.createElement("div");
+				slide.classList.add("slider__slide");
+				slide.innerHTML = `
+					<img
+						class="slider__slide__image"
+						src="${image}"
+						loading="lazy"
+						alt=""
+					/>
+				`;
+
+				return slide;
+			};
+
 			document.addEventListener("DOMContentLoaded", function (event) {
-				simplySlide.setSlider({
+				const slide = simplySlide.setSlider({
 					node: document.getElementById("slider1"),
 					controlsColor: "#f905",
 					controlsActiveColor: "#f90",
 					directionIconColor: "#333",
 				});
-				simplySlide.setSlider({
-					node: document.getElementById("slider2"),
-					hasDotsControl: false,
-				});
-				simplySlide.setSlider({
-					node: document.getElementById("slider3"),
-				});
-
-				simplySlide.setSlider({
-					node: document.getElementById("slider4"),
-				});
+				setTimeout(() => {
+					slide.addLazy(
+						createImageSlide(
+							"https://images.unsplash.com/photo-1621569899609-e6ca91a72f97?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyNDIyNjB8MXwxfGFsbHwxfHx8fHx8Mnx8MTYyNDY1ODgyNw&ixlib=rb-1.2.1&q=80&w=400&fit=max"
+						)
+					);
+				}, 3000);
 			});
+
+			// fetch(
+			// 	"https://api.unsplash.com/photos?page=2&client_id=nPky8UvfmaFxtiSrnvOLM2z-Wa3Prkagwk_Q1_JxNqo"
+			// )
+			// 	.then(function (response) {
+			// 		return response.json();
+			// 	})
+			// 	.then(function (json) {
+			// 		const photos = json.map((photo) => photo.urls.regular);
+			// 		console.log(photos);
+			// 	});
 		</script>
 	</body>
 </html>

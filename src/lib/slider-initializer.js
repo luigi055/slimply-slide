@@ -1,6 +1,7 @@
 import SliderControlsBuilder from "./modules/slider-control-builder";
 import ActiveSlideManager from "./modules/active-slide-manager";
 import SlidesEngine from "./modules/slides-engine";
+import { SLIDER_CONTAINER_CLASS } from "./constants";
 
 export default class SliderInitializer {
 	constructor(slider, options) {
@@ -33,5 +34,29 @@ export default class SliderInitializer {
 
 		this._sliderControlsBuilder.build();
 		this._slides.generateSlides();
+
+		return {
+			addLazy: (slide) => {
+				console.warn(slide);
+
+				this._slider
+					.querySelector(`.${SLIDER_CONTAINER_CLASS}`)
+					.appendChild(slide);
+
+				this._sliderControlsBuilder = new SliderControlsBuilder(
+					this._slider,
+					this._options
+				);
+
+				this._activeSlideManager.regenerateSlides(this._slider);
+				this._slides.regenerateSlides(this._slider, slide);
+
+				this._sliderControlsBuilder
+					.createDotsControl(this._slides.slideNodes, {
+						onDotClick: this._slides.setPositionByIndex,
+					})
+					.build();
+			},
+		};
 	}
 }
