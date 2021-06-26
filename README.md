@@ -56,10 +56,10 @@ require "simply-slide/dist/simply-slide.css";
 
 ```
 // Javascript
-https://unpkg.com/simply-slide@0.0.2/dist/simply-slide.js
+https://unpkg.com/simply-slide@0.0.4/dist/simply-slide.js
 
 // CSS
-https://unpkg.com/simply-slide@0.0.2/dist/simply-slide.css
+https://unpkg.com/simply-slide@0.0.4/dist/simply-slide.css
 ```
 
 This is an example using UMD with html
@@ -71,7 +71,7 @@ This is an example using UMD with html
 		<title>Simply slide</title>
 		<link
 			rel="stylesheet"
-			href="https://unpkg.com/simply-slide@0.0.2/dist/simply-slide.css"
+			href="https://unpkg.com/simply-slide@0.0.4/dist/simply-slide.css"
 		/>
 	</head>
 	<body>
@@ -83,7 +83,7 @@ This is an example using UMD with html
 			</div>
 		</div>
 
-		<script src="https://unpkg.com/simply-slide@0.0.1/dist/simply-slide.js"></script>
+		<script src="https://unpkg.com/simply-slide@0.0.4/dist/simply-slide.js"></script>
 		<script>
 			document.addEventListener("DOMContentLoaded", function (event) {
 				simplySlide.setSlider({
