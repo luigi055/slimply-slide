@@ -135,9 +135,31 @@ Here a really basic example with the basic building blocks.
 
 [Basic Example](https://simply-slide.surge.sh/basic.html)
 
+## CSS Class Utilities
+
 ### Use the `slider__slide__image`
 
 This utility is a great complement to your contents that contain images.
 the utility class enrich the images with a resize when the user touch or clicks on the slide.
 
 Really good for UX interaction.
+
+[Images example](https://simply-slide.surge.sh/images-example.html)
+
+### Use the `slider__slide-centered`
+
+With this class you could center the content of the slide. it uses `flexbox` with `justify-content` and `align-items` to center.
+
+_Use this class utils with the slide directly_
+
+```
+<div class="slider" id="slider1">
+	<div class="slider__container">
+		<div class="slider__slide slider__slide-centered"><span>1</span></div>
+		<div class="slider__slide slider__slide-centered"><span>2</span></div>
+		<div class="slider__slide slider__slide-centered"><span>3</span></div>
+	</div>
+</div>
+```
+
+[Basic example centered](https://simply-slide.surge.sh/basic-centered.html)
