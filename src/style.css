@@ -1,5 +1,5 @@
 :root {
-	--gap: 15px;
+	--gap: 5px;
 	--directionButtonSize: 30px;
 }
 
@@ -93,7 +93,6 @@
 
 .slider .slider__slide {
 	box-sizing: border-box;
-	padding: 1rem;
 	user-select: none;
 	width: calc(100vw - var(--gap));
 }
@@ -107,5 +106,5 @@
 }
 
 .slider .slider__container--grabbing .slider__slide__image {
-	transform: scale(0.9);
+	transform: scale(0.95);
 }

@@ -11,11 +11,7 @@ export default class SliderInitializer {
 			this._slider,
 			this._options
 		);
-		this._activeSlideManager = new ActiveSlideManager(
-			this._slider,
-			this._options
-		);
-		this._slides = new SlidesEngine(this._slider, this._activeSlideManager);
+		this._slides = new SlidesEngine(this._slider);
 	}
 
 	init() {
@@ -30,22 +26,13 @@ export default class SliderInitializer {
 		this._sliderControlsBuilder.build();
 		this._slides.generateSlides();
 
-		console.warn(
-			`Slide ${this._slides.currentIndex + 1}/${this._slides.slideNodes.length}`
-		);
-
 		return {
 			addLazy: (slide) => {
 				this._slider
 					.querySelector(`.${SLIDER_CONTAINER_CLASS}`)
 					.appendChild(slide);
 
-				this._slides.regenerateSlides(this._slider, slide);
-				console.warn(
-					`Slide ${this._slides.currentIndex + 1}/${
-						this._slides.slideNodes.length
-					}`
-				);
+				this._slides.enrichNewSlide(this._slider, slide);
 			},
 		};
 	}

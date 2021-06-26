@@ -5,20 +5,15 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Simple slide show</title>
-		<link rel="stylesheet" href="../dist/simply-slide.css" />
-		<style>
-			.my_slide {
-				width: 400px;
-				height: 200px;
-			}
-		</style>
+		<link rel="stylesheet" href="dist/simply-slide.css" />
+		<link rel="stylesheet" href="index.css" />
 	</head>
 	<body>
-		<div class="slider my_slide" id="slider1">
+		<div class="slider blog__gallery" id="slider1">
 			<div class="slider__container">
 				<div class="slider__slide">
 					<img
-						class="slider__slide__image"
+						class="slider__slide__image blog__gallery__image"
 						loading="lazy"
 						alt=""
 						src="https://images.unsplash.com/photo-1621569899609-e6ca91a72f97?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyNDIyNjB8MXwxfGFsbHwxfHx8fHx8Mnx8MTYyNDY1ODgyNw&ixlib=rb-1.2.1&q=80&w=400&fit=max"
@@ -26,7 +21,7 @@
 				</div>
 				<div class="slider__slide">
 					<img
-						class="slider__slide__image"
+						class="slider__slide__image blog__gallery__image"
 						src="https://images.unsplash.com/photo-1621569899609-e6ca91a72f97?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyNDIyNjB8MXwxfGFsbHwxfHx8fHx8Mnx8MTYyNDY1ODgyNw&ixlib=rb-1.2.1&q=80&w=400&fit=max"
 						loading="lazy"
 						alt=""
@@ -34,7 +29,7 @@
 				</div>
 				<div class="slider__slide">
 					<img
-						class="slider__slide__image"
+						class="slider__slide__image blog__gallery__image"
 						src="https://images.unsplash.com/photo-1621569899609-e6ca91a72f97?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyNDIyNjB8MXwxfGFsbHwxfHx8fHx8Mnx8MTYyNDY1ODgyNw&ixlib=rb-1.2.1&q=80&w=400&fit=max"
 						loading="lazy"
 						alt=""
@@ -42,53 +37,12 @@
 				</div>
 			</div>
 		</div>
+		<button id="more-images-btn">get more images</button>
 
-		<div class="slider" id="slider4">
-			<div class="slider__container"></div>
-		</div>
-		<script src="../dist/simply-slide.js"></script>
+		<script src="dist/simply-slide.js"></script>
+		<script src="index.js"></script>
 		<script>
-			const createImageSlide = (image) => {
-				const slide = document.createElement("div");
-				slide.classList.add("slider__slide");
-				slide.innerHTML = `
-					<img
-						class="slider__slide__image"
-						src="${image}"
-						loading="lazy"
-						alt=""
-					/>
-				`;
-
-				return slide;
-			};
-
-			document.addEventListener("DOMContentLoaded", function (event) {
-				const slide = simplySlide.setSlider({
-					node: document.getElementById("slider1"),
-					controlsColor: "#f905",
-					controlsActiveColor: "#f90",
-					directionIconColor: "#333",
-				});
-				setTimeout(() => {
-					slide.addLazy(
-						createImageSlide(
-							"https://images.unsplash.com/photo-1621569899609-e6ca91a72f97?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyNDIyNjB8MXwxfGFsbHwxfHx8fHx8Mnx8MTYyNDY1ODgyNw&ixlib=rb-1.2.1&q=80&w=400&fit=max"
-						)
-					);
-				}, 3000);
-			});
-
-			// fetch(
-			// 	"https://api.unsplash.com/photos?page=2&client_id=nPky8UvfmaFxtiSrnvOLM2z-Wa3Prkagwk_Q1_JxNqo"
-			// )
-			// 	.then(function (response) {
-			// 		return response.json();
-			// 	})
-			// 	.then(function (json) {
-			// 		const photos = json.map((photo) => photo.urls.regular);
-			// 		console.log(photos);
-			// 	});
+			initializeSlider(document.getElementById("slider1"));
 		</script>
 	</body>
 </html>

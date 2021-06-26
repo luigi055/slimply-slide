@@ -1,14 +1,13 @@
 import { SLIDER_SLIDE_CLASS } from "../constants";
 
 export default class ActiveSlideManager {
-	constructor(slider, options) {
+	constructor(slider) {
 		this._slider = slider;
-		this.options = options;
 
 		this.replaceActiveSlide = this.replaceActiveSlide.bind(this);
 	}
 
-	regenerateSlides(slider) {
+	refreshSlideManager(slider) {
 		this._slider = slider;
 	}
 

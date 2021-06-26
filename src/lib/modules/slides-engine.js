@@ -4,12 +4,12 @@ import {
 	SLIDER_CONTAINER_CLASS,
 	SLIDER_SLIDE_CLASS,
 } from "../constants";
-import { generateDotID } from "../utils";
+import ActiveSlideManager from "./active-slide-manager";
 
 export default class SlidesEngine {
 	constructor(slider, activeSlideManager) {
 		this._slider = slider;
-		this._activeSlideManager = activeSlideManager;
+		this._activeSlideManager = new ActiveSlideManager(this._slider);
 		this._sliderContainer = this._slider.querySelector(
 			`.${SLIDER_CONTAINER_CLASS}`
 		);
@@ -26,11 +26,19 @@ export default class SlidesEngine {
 		this.currentTranslate = 0;
 		this.prevTranslate = 0;
 		this.animationID = 0;
-		this.currentIndex = 0;
+		this._currentSlideIndex = 0;
 	}
 
-	get slideNodes() {
-		return this._slides;
+	get slidesLength() {
+		return this._slides.length;
+	}
+
+	set currentSlideIndex(index) {
+		this._currentSlideIndex = index;
+	}
+
+	get currentSlideIndex() {
+		return this._currentSlideIndex;
 	}
 
 	_getPositionX(event) {
@@ -50,7 +58,7 @@ export default class SlidesEngine {
 
 	_handleTouchStart(index) {
 		const event = (event) => {
-			this.currentIndex = index;
+			this.currentSlideIndex = index;
 			this.startPosition = this._getPositionX(event);
 			this.isDragging = true;
 
@@ -67,13 +75,13 @@ export default class SlidesEngine {
 		cancelAnimationFrame.call(window, this.animationID);
 
 		const movedBy = this.currentTranslate - this.prevTranslate;
-		if (movedBy < -100 && this.currentIndex < this._slides.length - 1) {
-			this.currentIndex += 1;
+		if (movedBy < -100 && this.currentSlideIndex < this._slides.length - 1) {
+			this.currentSlideIndex += 1;
 		}
-		if (movedBy > 100 && this.currentIndex > 0) {
-			this.currentIndex -= 1;
+		if (movedBy > 100 && this.currentSlideIndex > 0) {
+			this.currentSlideIndex -= 1;
 		}
-		this.setPositionByIndex(this.currentIndex);
+		this.setPositionByIndex(this.currentSlideIndex);
 		this._sliderContainer.classList.remove(
 			SLIDER_CONTAINER_GRABBING_STATUS_CLASS
 		);
@@ -90,22 +98,25 @@ export default class SlidesEngine {
 	setPositionByIndex = (index) => {
 		this.currentTranslate = index * -window.innerWidth;
 		this.prevTranslate = this.currentTranslate;
-		this.currentIndex = index;
+		this.currentSlideIndex = index;
 		this._setSliderPosition();
 		this._activeSlideManager.replaceActiveSlide(index);
 	};
 
 	goNextSlide() {
-		const nextIndex = Math.min(this.currentIndex + 1, this._slides.length - 1);
+		const nextIndex = Math.min(
+			this.currentSlideIndex + 1,
+			this.slidesLength - 1
+		);
 		this.setPositionByIndex(nextIndex);
 	}
 
 	goPreviousSlide() {
-		const previousIndex = Math.max(this.currentIndex - 1, 0);
+		const previousIndex = Math.max(this.currentSlideIndex - 1, 0);
 		this.setPositionByIndex(previousIndex);
 	}
 
-	createSlide(slide, index) {
+	enrichSlide(slide, index) {
 		const slideImage = slide.querySelector(`.${SLIDER_SLIDE_IMAGE_CLASS}`);
 		if (slideImage) {
 			slideImage.addEventListener("dragstart", (e) => e.preventDefault());
@@ -113,40 +124,34 @@ export default class SlidesEngine {
 
 		slide.setAttribute("aria-hidden", true);
 		slide.setAttribute("aria-selected", false);
-		slide.setAttribute("id", `slide-${index}`);
+		slide.setAttribute("data-slide_page", index);
 		slide.setAttribute("role", "option");
-		slide.setAttribute(
-			"aria-describedby",
-			generateDotID(this._slider.getAttribute("id"), index)
-		);
 
-		// Touch events
 		slide.addEventListener("touchstart", this._handleTouchStart(index));
 		slide.addEventListener("touchend", this._handleTouchEnd);
 		slide.addEventListener("touchmove", this._handleTouchMove);
 
-		// Mouse events
 		slide.addEventListener("mousedown", this._handleTouchStart(index));
 		slide.addEventListener("mouseup", this._handleTouchEnd);
 		slide.addEventListener("mouseleave", this._handleTouchEnd);
 		slide.addEventListener("mousemove", this._handleTouchMove);
 	}
 
-	regenerateSlides(slider, slide) {
+	enrichNewSlide(slider, slide) {
 		this._slider = slider;
 		this._sliderContainer = this._slider.querySelector(
 			`.${SLIDER_CONTAINER_CLASS}`
 		);
 		this._slides = this._slider.querySelectorAll(`.${SLIDER_SLIDE_CLASS}`);
-		this._activeSlideManager.regenerateSlides(this._slider);
-		this.createSlide(slide, this._slides.length - 1);
+		this._activeSlideManager.refreshSlideManager(this._slider);
+		this.enrichSlide(slide, this.slidesLength - 1);
 	}
 
 	generateSlides() {
 		Array.from(this._slides).forEach((slide, index) => {
-			this.createSlide(slide, index);
+			this.enrichSlide(slide, index);
 		});
 
-		this._activeSlideManager.replaceActiveSlide(this.currentIndex);
+		this._activeSlideManager.replaceActiveSlide(this.currentSlideIndex);
 	}
 }
