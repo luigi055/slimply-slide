@@ -138,6 +138,7 @@ export default class SlidesEngine {
 			`.${SLIDER_CONTAINER_CLASS}`
 		);
 		this._slides = this._slider.querySelectorAll(`.${SLIDER_SLIDE_CLASS}`);
+		this._activeSlideManager.regenerateSlides(this._slider);
 		this.createSlide(slide, this._slides.length - 1);
 	}
 

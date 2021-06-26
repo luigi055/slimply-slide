@@ -20,11 +20,6 @@ export default class SliderInitializer {
 
 	init() {
 		this._slider.setAttribute("role", "toolbar");
-		if (this._options.hasDotsControl === true) {
-			this._sliderControlsBuilder.createDotsControl(this._slides.slideNodes, {
-				onDotClick: this._slides.setPositionByIndex,
-			});
-		}
 
 		if (this._options.hasDirectionsButton === true) {
 			this._sliderControlsBuilder
@@ -35,27 +30,22 @@ export default class SliderInitializer {
 		this._sliderControlsBuilder.build();
 		this._slides.generateSlides();
 
+		console.warn(
+			`Slide ${this._slides.currentIndex + 1}/${this._slides.slideNodes.length}`
+		);
+
 		return {
 			addLazy: (slide) => {
-				console.warn(slide);
-
 				this._slider
 					.querySelector(`.${SLIDER_CONTAINER_CLASS}`)
 					.appendChild(slide);
 
-				this._sliderControlsBuilder = new SliderControlsBuilder(
-					this._slider,
-					this._options
-				);
-
-				this._activeSlideManager.regenerateSlides(this._slider);
 				this._slides.regenerateSlides(this._slider, slide);
-
-				this._sliderControlsBuilder
-					.createDotsControl(this._slides.slideNodes, {
-						onDotClick: this._slides.setPositionByIndex,
-					})
-					.build();
+				console.warn(
+					`Slide ${this._slides.currentIndex + 1}/${
+						this._slides.slideNodes.length
+					}`
+				);
 			},
 		};
 	}
