@@ -171,11 +171,19 @@ import { setSlider } from "simply-slide";
 
 setSlider({
   node: document.querySelector("#slider1")
-  hasDirectionsButton: true, // true by default. it shows the direction buttons
-	controlsColor: "#3335", // change the color of the direction buttons
-	directionIconColor: "#efefef // change the color of the button icon
+  shouldDisableContextMenu: false // false by default. it shows the browser context menu.
+  hasDirectionsButton: true, // true by default. it shows the direction buttons.
+	controlsColor: "#3335", // change the color of the direction buttons.
+	directionIconColor: "#efefef // change the color of the button icon.
 })
 ```
+
+Look a these example to see the configuration in action. try to right click on the slider.
+**In these examples the context menu are disabled.**
+
+[Example with disable context disabled](https://simply-slide.surge.sh/images-example-without-context-menu.html)
+
+[Customized slide show](http://the-photo-blog.surge.sh/)
 
 ### Add more slides dynamically
 
