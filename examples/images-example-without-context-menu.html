@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Simply slide - Image example</title>
+		<link
+			rel="stylesheet"
+			href="https://unpkg.com/simply-slide@0.0.5/dist/simply-slide.css"
+		/>
+		<style>
+			.my_image {
+				width: 300px;
+				height: 500px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="slider" id="slider1">
+			<div class="slider__container">
+				<div class="slider__slide slider__slide-centered">
+					<img
+						class="slider__slide__image my_image"
+						src="images/guitar1.png"
+						alt=""
+						loading="lazy"
+					/>
+				</div>
+				<div class="slider__slide slider__slide-centered">
+					<img
+						class="slider__slide__image my_image"
+						src="images/guitar2.png"
+						alt=""
+						loading="lazy"
+					/>
+				</div>
+				<div class="slider__slide slider__slide-centered">
+					<img
+						class="slider__slide__image my_image"
+						src="images/guitar3.png"
+						alt=""
+						loading="lazy"
+					/>
+				</div>
+			</div>
+		</div>
+
+		<script src="https://unpkg.com/simply-slide@0.0.5/dist/simply-slide.js"></script>
+		<script>
+			document.addEventListener("DOMContentLoaded", function (event) {
+				simplySlide.setSlider({
+					node: document.getElementById("slider1"),
+					shouldDisableContextMenu: true,
+				});
+			});
+		</script>
+	</body>
+</html>

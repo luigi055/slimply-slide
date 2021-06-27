@@ -17,6 +17,14 @@ export default class SliderInitializer {
 	init() {
 		this._slider.setAttribute("role", "toolbar");
 
+		if (this._options.shouldDisableContextMenu) {
+			this._slider.oncontextmenu = function (event) {
+				event.preventDefault();
+				event.stopPropagation();
+				return false;
+			};
+		}
+
 		if (this._options.hasDirectionsButton === true) {
 			this._sliderControlsBuilder
 				.createLeftButton({ onClick: this._slides.goPreviousSlide })
