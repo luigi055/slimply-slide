@@ -17,6 +17,7 @@ export function setSlider({
 		hasDirectionsButton,
 		controlsColor,
 		directionIconColor,
+		shouldDisableContextMenu,
 	});
 
 	return slideShow.init();
