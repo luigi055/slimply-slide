@@ -26,19 +26,11 @@ export default class SlidesEngine {
 		this.currentTranslate = 0;
 		this.prevTranslate = 0;
 		this.animationID = 0;
-		this._currentSlideIndex = 0;
+		this.currentSlideIndex = 0;
 	}
 
 	get slidesLength() {
 		return this._slides.length;
-	}
-
-	set currentSlideIndex(index) {
-		this._currentSlideIndex = index;
-	}
-
-	get currentSlideIndex() {
-		return this._currentSlideIndex;
 	}
 
 	_getPositionX(event) {
@@ -81,7 +73,7 @@ export default class SlidesEngine {
 		if (movedBy > 100 && this.currentSlideIndex > 0) {
 			this.currentSlideIndex -= 1;
 		}
-		this.setPositionByIndex(this.currentSlideIndex);
+		this._setPositionByIndex(this.currentSlideIndex);
 		this._sliderContainer.classList.remove(
 			SLIDER_CONTAINER_GRABBING_STATUS_CLASS
 		);
@@ -95,7 +87,7 @@ export default class SlidesEngine {
 		}
 	}
 
-	setPositionByIndex = (index) => {
+	_setPositionByIndex = (index) => {
 		this.currentTranslate = index * -window.innerWidth;
 		this.prevTranslate = this.currentTranslate;
 		this.currentSlideIndex = index;
@@ -108,12 +100,12 @@ export default class SlidesEngine {
 			this.currentSlideIndex + 1,
 			this.slidesLength - 1
 		);
-		this.setPositionByIndex(nextIndex);
+		this._setPositionByIndex(nextIndex);
 	}
 
 	goPreviousSlide() {
 		const previousIndex = Math.max(this.currentSlideIndex - 1, 0);
-		this.setPositionByIndex(previousIndex);
+		this._setPositionByIndex(previousIndex);
 	}
 
 	enrichSlide(slide, index) {
@@ -137,8 +129,9 @@ export default class SlidesEngine {
 		slide.addEventListener("mousemove", this._handleTouchMove);
 	}
 
-	enrichNewSlide(slider, slide) {
+	addSlide(slider, slide) {
 		this._slider = slider;
+		this._slider.querySelector(`.${SLIDER_CONTAINER_CLASS}`).appendChild(slide);
 		this._sliderContainer = this._slider.querySelector(
 			`.${SLIDER_CONTAINER_CLASS}`
 		);

@@ -36,11 +36,7 @@ export default class SliderInitializer {
 
 		return {
 			addLazy: (slide) => {
-				this._slider
-					.querySelector(`.${SLIDER_CONTAINER_CLASS}`)
-					.appendChild(slide);
-
-				this._slides.enrichNewSlide(this._slider, slide);
+				this._slides.addSlide(this._slider, slide);
 			},
 		};
 	}
