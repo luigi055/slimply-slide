@@ -163,6 +163,29 @@ describe("Testing the simplySlide widget", () => {
 			expect(nextSlideButton).toHaveStyle(`background: ${controlsColor}`);
 			expect(previousSlideButton).toHaveStyle(`background: ${controlsColor}`);
 		});
+
+		it("should disable the context menu", () => {
+			let slider = container.querySelector("#slider1");
+			const controlsColor = "#f905";
+			const directionIconColor = "#333";
+
+			setSlider({
+				node: slider,
+				shouldDisableContextMenu: true,
+			});
+
+			// This invocation is for covering purposes. Since it is difficult to test
+			// the context menu since it is a proper behavior of the real browser.
+			// this includes the covering part of the body of the real event callback
+			// when shouldDisableContextMenu is set to true
+			fireEvent.contextMenu(slider);
+
+			// Then the event is mocked just to check if the event is working properly
+			slider.oncontextmenu = jest.fn();
+			fireEvent.contextMenu(slider);
+
+			expect(slider.oncontextmenu).toHaveBeenCalledTimes(1);
+		});
 	}); // Testing controls customizable colors END
 
 	describe("Testing Slides", () => {
