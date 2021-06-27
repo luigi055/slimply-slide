@@ -181,7 +181,7 @@ setSlider({
 Look a these example to see the configuration in action. try to right click on the slider.
 **In these examples the context menu are disabled.**
 
-[Example with disable context disabled](https://simply-slide.surge.sh/images-example-without-context-menu.html)
+[Example with context menu disabled](https://simply-slide.surge.sh/images-example-without-context-menu.html)
 
 [Customized slide show](http://the-photo-blog.surge.sh/)
 
